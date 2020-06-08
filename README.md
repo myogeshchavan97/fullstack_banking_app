@@ -1,3 +1,13 @@
+## To Run the project execute following commands in sequence
+
+    1. cd server
+    2. yarn install
+    3. yarn start
+    4. cd ..
+    5. yarn install
+    6. yarn start
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
