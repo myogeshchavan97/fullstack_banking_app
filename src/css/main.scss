@@ -1,0 +1,296 @@
+$background: #ccc;
+
+%centered {
+  display: flex;
+  min-height: 60vh;
+  justify-content: center;
+  align-items: center;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: Nunito, Helvetica Neue, Helvetica, sans-serif;
+  font-size: 20px;
+  background: #d9c2ac;
+  color: #454141;
+  padding: 1rem;
+  letter-spacing: 1px;
+}
+
+.errorMsg {
+  color: #f21e08;
+  padding: 0.5rem;
+  padding-left: 0;
+  max-width: 450px;
+}
+
+.successMsg {
+  color: #00ff00;
+  background: #077707;
+  padding: 0.5rem;
+}
+
+h1 {
+  font-size: 4rem;
+}
+
+h2 {
+  font-size: 3.2rem;
+  margin-bottom: 2rem;
+}
+
+h3 {
+  font-size: 2.8rem;
+}
+
+h5 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 3rem;
+
+  .links {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: inherit;
+    margin-top: 3rem;
+
+    .link:link,
+    .link:visited {
+      outline: none;
+      color: #000;
+      margin: 1rem;
+      padding: 0.5rem 0;
+      text-decoration: none;
+      text-transform: uppercase;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .link:hover,
+    .link:active {
+      border-bottom: 2px solid #fff;
+    }
+  }
+}
+
+.action-items {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn {
+  margin: 1rem 0;
+}
+
+.active {
+  font-weight: bold;
+  box-shadow: 0 0 5px #000;
+}
+
+.loading {
+  @extend %centered;
+}
+
+.error-msg {
+  color: #f21e08;
+  background: #fff0f0;
+  padding: 1rem;
+  font-size: 1.2rem;
+}
+
+.success-msg {
+  color: #00ff00;
+  background: #077707;
+  padding: 1rem;
+  font-size: 1.2rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-control {
+  display: unset;
+}
+
+.login-page {
+  text-align: center;
+}
+
+button,
+input[type='button'],
+input[type='submit'],
+.btn {
+  font-size: 1.6rem;
+}
+
+.form-control {
+  font-size: 1.6rem;
+}
+
+.login-form {
+  width: 50%;
+  margin: auto;
+  font-size: 2.5rem;
+  text-align: left;
+  @extend %centered;
+
+  .login-btn {
+    padding: 0.5rem 1rem;
+    background: #676779;
+    color: #fff;
+    border-radius: 5px;
+  }
+}
+
+.account {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+
+  .account-btn {
+    margin: 1.6rem;
+    padding: 6px 12px;
+    letter-spacing: 1px;
+  }
+}
+
+.label-value {
+  margin-left: 1rem;
+  word-break: break-all;
+}
+
+.profile-form {
+  .label-value {
+    display: block;
+    margin-left: 0;
+  }
+}
+
+.edit-account {
+  font-size: 1.6rem;
+  float: right;
+  letter-spacing: initial;
+  text-decoration: underline;
+  padding-top: 0.5rem;
+}
+
+.summary-form .label {
+  width: 15rem;
+}
+
+.summary-form,
+.account {
+  width: 80%;
+  margin: auto;
+  text-align: center;
+}
+
+.btn-report {
+  margin: 1rem 0;
+}
+
+.transactions-section {
+  text-align: left;
+
+  .main-info {
+    text-align: left;
+  }
+}
+
+.report-table {
+  margin-bottom: 3rem;
+}
+
+%pagination {
+  background-color: #d9c2ac;
+}
+
+%active-pagination {
+  background-color: inherit;
+  border-color: inherit;
+  color: #fff;
+  outline: none;
+
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.page-item {
+  @extend %pagination;
+  &.active {
+    background-color: #494961;
+    .page-link {
+      @extend %active-pagination;
+    }
+  }
+  .page-link {
+    @extend %active-pagination;
+  }
+}
+
+.dropdown-toggle {
+  background-color: #fff;
+  color: #000;
+}
+
+.dropdown-menu {
+  min-width: 5rem;
+  a {
+    color: #000;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .action-items {
+    flex-direction: column;
+  }
+
+  .login-form {
+    width: 100%;
+  }
+
+  header {
+    .links {
+      .link:link,
+      .link:visited {
+        display: block;
+      }
+
+      .link:hover,
+      .link:active {
+        border-bottom: 2px solid transparent;
+      }
+    }
+  }
+
+  .account {
+    flex-direction: column;
+    text-align: left;
+
+    .account-btn {
+      margin: 1rem;
+      padding: 3px 8px;
+    }
+  }
+
+  .edit-account {
+    display: block;
+    float: none;
+  }
+
+  .account-form {
+    .label-value {
+      display: block;
+      margin-left: 0;
+    }
+  }
+}

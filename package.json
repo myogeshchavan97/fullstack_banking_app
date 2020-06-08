@@ -1,5 +1,5 @@
 {
-  "name": "react-express-node-postgresql",
+  "name": "fullstack-banking-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -8,7 +8,19 @@
     "@testing-library/user-event": "^7.1.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "axios": "^0.19.2",
+    "node-sass": "^4.14.1",
+    "bootstrap": "4.4.1",
+    "history": "4.10.1",
+    "jwt-decode": "2.2.0",
+    "lodash": "4.17.15",
+    "moment": "2.25.3",
+    "react-bootstrap": "1.0.1",
+    "react-redux": "7.2.0",
+    "react-router-dom": "5.1.2",
+    "redux": "4.0.5",
+    "redux-thunk": "2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
