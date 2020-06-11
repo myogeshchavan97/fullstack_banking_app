@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transaction Report</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div className="main-info">
+      <p><strong>Account number:</strong> <%=account.account_no%></p>
+      <p><strong>Bank name:</strong> <%=account.bank_name%></p>
+      <p><strong>IFSC code:</strong> <%=account.ifsc%></p>
+      <p>
+        <strong>Total available balance:</strong> <%=account.total_balance%>
+      </p>
+    </div>
+    <br />
+    <h4>
+      Detailed transactions between <%=start_date%> and <%=end_date%>
+    </h4>
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Deposits</th>
+          <th>Withdrawals</th>
+          <th>Balance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% transactions.map(function(transaction) { %>
+        <tr>
+          <td><%=transaction.formatted_date%></td>
+          <td><%=transaction.deposit_amount%></td>
+          <td><%=transaction.withdraw_amount%></td>
+          <td><%=transaction.balance%></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </body>
+</html>

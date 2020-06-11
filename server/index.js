@@ -10,6 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
+app.set('view engine', 'ejs');
 app.use(cors());
 app.use(authRoute);
 app.use(accountRoute.Router);

@@ -50,7 +50,6 @@ Router.post('/signup', async (req, res) => {
     );
     res.status(201).send();
   } catch (error) {
-    console.log('err', error);
     res.status(400).send({
       signup_error: 'Error while signing up..Try again later.'
     });

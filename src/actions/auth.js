@@ -24,7 +24,6 @@ export const initiateLogin = (email, password) => {
       dispatch(initiateGetProfile(user.email));
       history.push('/profile');
     } catch (error) {
-      console.log('error', error);
       error.response && dispatch(getErrors(error.response.data));
     }
   };
@@ -36,7 +35,6 @@ export const registerNewUser = (data) => {
       await axios.post(`${BASE_API_URL}/signup`, data);
       return { success: true };
     } catch (error) {
-      console.log('error', error);
       error.response && dispatch(getErrors(error.response.data));
       return { success: false };
     }

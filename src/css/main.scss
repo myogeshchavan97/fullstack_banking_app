@@ -32,7 +32,6 @@ body {
   background: #077707;
   padding: 0.5rem;
 }
-
 h1 {
   font-size: 4rem;
 }
@@ -50,7 +49,6 @@ h5 {
   font-size: 2rem;
   margin-bottom: 1rem;
 }
-
 header {
   text-align: center;
   margin-bottom: 3rem;
@@ -123,18 +121,15 @@ header {
 .login-page {
   text-align: center;
 }
-
 button,
 input[type='button'],
 input[type='submit'],
 .btn {
   font-size: 1.6rem;
 }
-
 .form-control {
   font-size: 1.6rem;
 }
-
 .login-form {
   width: 50%;
   margin: auto;
@@ -185,18 +180,15 @@ input[type='submit'],
 .summary-form .label {
   width: 15rem;
 }
-
 .summary-form,
 .account {
   width: 80%;
   margin: auto;
   text-align: center;
 }
-
 .btn-report {
   margin: 1rem 0;
 }
-
 .transactions-section {
   text-align: left;
 
@@ -205,6 +197,7 @@ input[type='submit'],
   }
 }
 
+/* table css */
 .report-table {
   margin-bottom: 3rem;
 }
@@ -212,7 +205,6 @@ input[type='submit'],
 %pagination {
   background-color: #d9c2ac;
 }
-
 %active-pagination {
   background-color: inherit;
   border-color: inherit;
@@ -223,7 +215,6 @@ input[type='submit'],
     box-shadow: none;
   }
 }
-
 .page-item {
   @extend %pagination;
   &.active {
