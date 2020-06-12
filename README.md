@@ -1,6 +1,6 @@
 ## Connect to Postgresql Database
 
-Add Postgresql database connection details in server/db/connect.js file
+Add Postgresql database connection details in `server/db/connect.js` file
 
 ## To run the project execute following commands in sequence
 
