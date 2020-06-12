@@ -1,4 +1,8 @@
-## To Run the project execute following commands in sequence
+## Connect to Postgresql Database
+
+Add Postgresql database connection details in `server/db/connect.js` file
+
+## To run the project execute following commands in sequence
 
     1. cd server
     2. yarn install
