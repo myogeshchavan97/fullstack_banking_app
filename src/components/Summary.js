@@ -125,7 +125,7 @@ class Summary extends React.Component {
             <DatePicker
               selected={endDate}
               name="end_date"
-              value={startDate}
+              value={endDate}
               className="form-control"
               onChange={this.handleEndDateChange}
             />

@@ -79,7 +79,16 @@ class Register extends React.Component {
   };
 
   render() {
-    const { errorMsg, successMsg, isSubmitted } = this.state;
+    const {
+      first_name,
+      last_name,
+      email,
+      password,
+      cpassword,
+      errorMsg,
+      successMsg,
+      isSubmitted
+    } = this.state;
     return (
       <div className="login-page">
         <h2>Register User</h2>
@@ -99,6 +108,7 @@ class Register extends React.Component {
               <Form.Control
                 type="text"
                 name="first_name"
+                value={first_name}
                 placeholder="Enter first name"
                 onChange={this.handleInputChange}
               />
@@ -108,6 +118,7 @@ class Register extends React.Component {
               <Form.Control
                 type="text"
                 name="last_name"
+                value={last_name}
                 placeholder="Enter last name"
                 onChange={this.handleInputChange}
               />
@@ -117,6 +128,7 @@ class Register extends React.Component {
               <Form.Control
                 type="email"
                 name="email"
+                value={email}
                 placeholder="Enter email"
                 onChange={this.handleInputChange}
               />
@@ -126,6 +138,7 @@ class Register extends React.Component {
               <Form.Control
                 type="password"
                 name="password"
+                value={password}
                 placeholder="Enter password"
                 onChange={this.handleInputChange}
               />
@@ -135,6 +148,7 @@ class Register extends React.Component {
               <Form.Control
                 type="password"
                 name="cpassword"
+                value={cpassword}
                 placeholder="Enter confirm password"
                 onChange={this.handleInputChange}
               />
