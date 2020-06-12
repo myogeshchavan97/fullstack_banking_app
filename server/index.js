@@ -1,4 +1,3 @@
-const path = require('path');
 const express = require('express');
 const authRoute = require('./routes/auth');
 const profileRoute = require('./routes/profile');
@@ -9,7 +8,6 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(express.static(path.join(__dirname, '..', 'build')));
 app.use(express.json());
 app.set('view engine', 'ejs');
 app.use(authRoute);
