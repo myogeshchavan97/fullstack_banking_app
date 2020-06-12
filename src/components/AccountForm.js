@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import {
   initiateGetAccntDetails,
   initiateAddAccntDetails,
@@ -16,218 +15,193 @@ import { validateFields } from '../utils/common';
 import { maskNumber } from '../utils/mask';
 import AddAccountForm from './AddAccountForm';
 
-class AccountForm extends React.Component {
-  state = {
-    amount: '',
-    account: this.props.account,
-    editAccount: false,
-    ifsc: '',
-    errorMsg: ''
-  };
+const AccountForm = (props) => {
+  const [amount, setAmount] = useState('');
+  const [account, setAccount] = useState(props.account);
+  const [editAccount, setEditAccount] = useState(false);
+  const [ifsc, setIfsc] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+  const propsRef = useRef(false);
 
-  componentDidMount() {
-    const { email } = this.props;
-    if (email) {
-      this.props.dispatch(initiateGetAccntDetails());
+  const processOnMount = useCallback(() => {
+    if (propsRef.current === false) {
+      const { email } = props;
+      if (email) {
+        props.dispatch(initiateGetAccntDetails());
+        propsRef.current = true;
+      }
     }
-  }
+    return () => props.dispatch(resetErrors());
+  }, [props]);
 
-  componentWillUnmount() {
-    this.props.dispatch(resetErrors());
-  }
+  useEffect(() => {
+    processOnMount();
+  }, [processOnMount]);
 
-  componentDidUpdate(prevProps) {
-    if (!_.isEqual(prevProps.account, this.props.account)) {
-      this.setState({ account: this.props.account });
-    }
-    if (!_.isEqual(prevProps.errors, this.props.errors)) {
-      this.setState({ errorMsg: this.props.errors });
-    }
-  }
+  useEffect(() => {
+    setAccount(props.account);
+  }, [props, props.account]);
 
-  handleUpdateAccount = (ifsc) => {
+  useEffect(() => {
+    setErrorMsg(props.errors);
+  }, [props, props.errors]);
+
+  const handleUpdateAccount = (ifsc) => {
     const fieldsToValidate = [{ ifsc }];
 
     const allFieldsEntered = validateFields(fieldsToValidate);
     if (!allFieldsEntered) {
-      this.setState({
-        errorMsg: {
-          update_error: 'Please enter ifsc code.'
-        }
+      setErrorMsg({
+        update_error: 'Please enter ifsc code.'
       });
     } else {
-      this.setState({
-        errorMsg: ''
-      });
-      this.props.dispatch(initiateUpdateAccntDetails(ifsc));
+      setErrorMsg('');
+      props.dispatch(initiateUpdateAccntDetails(ifsc));
     }
   };
 
-  handleAmountChange = (event) => {
-    this.setState({ amount: event.target.value });
+  const handleAmountChange = (event) => {
+    setAmount(event.target.value);
   };
 
-  handleEditAccount = (event) => {
+  const handleEditAccount = (event) => {
     event.preventDefault();
-    this.setState((prevState) => ({ editAccount: !prevState.editAccount }));
+    setEditAccount((prev) => !prev);
   };
 
-  handleInputChange = (event) => {
-    this.setState({
-      ifsc: event.target.value
-    });
+  const handleInputChange = (event) => {
+    setIfsc(event.target.value);
   };
 
-  handleOnSubmit = (event) => {
+  const handleOnSubmit = (event) => {
     event.preventDefault();
-    let { amount, account } = this.state;
 
-    const { selectedType } = this.props;
+    const { selectedType } = props;
     const fieldsToValidate = [{ amount }];
 
     const allFieldsEntered = validateFields(fieldsToValidate);
     if (!allFieldsEntered) {
-      this.setState({
-        errorMsg: {
-          [selectedType === 'withdraw'
-            ? 'withdraw_error'
-            : 'add_error']: 'Please enter an amount.'
-        }
+      setErrorMsg({
+        [selectedType === 'withdraw'
+          ? 'withdraw_error'
+          : 'add_error']: 'Please enter an amount.'
       });
     } else {
       let { total_balance } = account;
-      amount = +amount;
+      const selectedAmount = +amount;
       total_balance = +total_balance;
-      if (selectedType === 'withdraw' && amount <= total_balance) {
-        this.props.dispatch(initiateWithdrawAmount(account.account_id, amount));
-        this.setState({
-          errorMsg: ''
-        });
+      if (selectedType === 'withdraw' && selectedAmount <= total_balance) {
+        props.dispatch(
+          initiateWithdrawAmount(account.account_id, selectedAmount)
+        );
+        setErrorMsg('');
       } else if (selectedType === 'deposit') {
-        this.props.dispatch(initiateDepositAmount(account.account_id, amount));
-        this.setState({
-          errorMsg: ''
-        });
+        props.dispatch(
+          initiateDepositAmount(account.account_id, selectedAmount)
+        );
+        setErrorMsg('');
       } else {
-        this.setState({
-          errorMsg: {
-            [selectedType === 'withdraw'
-              ? 'withdraw_error'
-              : 'add_error']: "You don't have enough balance in your account"
-          }
+        setErrorMsg({
+          [selectedType === 'withdraw'
+            ? 'withdraw_error'
+            : 'add_error']: "You don't have enough balance in your account"
         });
       }
     }
   };
 
-  handleAddAccount = (account) => {
+  const handleAddAccount = (account) => {
     const { account_no, bank_name, ifsc } = account;
-    this.props
+    props
       .dispatch(initiateAddAccntDetails(account_no, bank_name, ifsc))
-      .then(() => this.props.dispatch(initiateGetAccntDetails()));
+      .then(() => props.dispatch(initiateGetAccntDetails()));
   };
 
-  render() {
-    const { selectedType } = this.props;
-    const { editAccount, ifsc, errorMsg, account } = this.state;
-    const account_no = account.account_no ? maskNumber(account.account_no) : '';
-    const type = selectedType.charAt(0).toUpperCase() + selectedType.slice(1);
-    return account_no ? (
-      editAccount ? (
-        <div className="edit-account-form  col-md-6 offset-md-3">
-          <h3>
-            Account details
-            <a
-              href="/#"
-              className="edit-account"
-              onClick={this.handleEditAccount}
-            >
-              Go Back
-            </a>
-          </h3>
-          <hr />
-          <Form>
-            {errorMsg && errorMsg.update_error && (
-              <p className="errorMsg">{errorMsg.update_error}</p>
-            )}
-            <Form.Group controlId="acc_no">
-              <Form.Label>Account number:</Form.Label>
-              <span className="label-value">{account && account_no}</span>
-            </Form.Group>
-            <Form.Group controlId="bank_name">
-              <Form.Label>Bank name:</Form.Label>
-              <span className="label-value">
-                {account && account.bank_name}
-              </span>
-            </Form.Group>
-            <Form.Group controlId="ifsc">
-              <Form.Label>IFSC code:</Form.Label>
-              <span className="label-value">{account && account.ifsc}</span>
-              <Form.Control
-                type="text"
-                placeholder="Enter new IFSC code"
-                value={ifsc}
-                onChange={this.handleInputChange}
-              />
-            </Form.Group>
-            <Button
-              variant="primary"
-              onClick={() => this.handleUpdateAccount(ifsc)}
-            >
-              Update details
-            </Button>
-          </Form>
-        </div>
-      ) : (
-        <div className="account-form col-md-6 offset-md-3">
-          {errorMsg && errorMsg.withdraw_error && (
-            <p className="errorMsg">{errorMsg.withdraw_error}</p>
+  const { selectedType } = props;
+  const account_no = account.account_no ? maskNumber(account.account_no) : '';
+  const type = selectedType.charAt(0).toUpperCase() + selectedType.slice(1);
+  return account_no ? (
+    editAccount ? (
+      <div className="edit-account-form  col-md-6 offset-md-3">
+        <h3>
+          Account details
+          <a href="/#" className="edit-account" onClick={handleEditAccount}>
+            Go Back
+          </a>
+        </h3>
+        <hr />
+        <Form>
+          {errorMsg && errorMsg.update_error && (
+            <p className="errorMsg">{errorMsg.update_error}</p>
           )}
-          {errorMsg && errorMsg.add_error && (
-            <p className="errorMsg">{errorMsg.add_error}</p>
-          )}
-          <Form onSubmit={this.handleOnSubmit} className="account-form">
-            <Form.Group controlId="type">
-              <Form.Label>{type}</Form.Label>
-              <a
-                href="/#"
-                className="edit-account"
-                onClick={this.handleEditAccount}
-              >
-                Edit Account Details
-              </a>
-            </Form.Group>
-            <hr />
-            <Form.Group controlId="accnt_no">
-              <Form.Label>Account number: </Form.Label>
-              <span className="label-value">{account && account_no}</span>
-            </Form.Group>
-            <Form.Group controlId="accnt_no">
-              <Form.Label>Available balance: </Form.Label>
-              <span className="label-value">
-                {account && account.total_balance}
-              </span>
-            </Form.Group>
-            <Form.Group controlId="amount">
-              <Form.Label>Amount:</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder={`Enter amount to ${selectedType}`}
-                value={this.state.amount}
-                onChange={this.handleAmountChange}
-              />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
-          </Form>
-        </div>
-      )
+          <Form.Group controlId="acc_no">
+            <Form.Label>Account number:</Form.Label>
+            <span className="label-value">{account && account_no}</span>
+          </Form.Group>
+          <Form.Group controlId="bank_name">
+            <Form.Label>Bank name:</Form.Label>
+            <span className="label-value">{account && account.bank_name}</span>
+          </Form.Group>
+          <Form.Group controlId="ifsc">
+            <Form.Label>IFSC code:</Form.Label>
+            <span className="label-value">{account && account.ifsc}</span>
+            <Form.Control
+              type="text"
+              placeholder="Enter new IFSC code"
+              value={ifsc}
+              onChange={handleInputChange}
+            />
+          </Form.Group>
+          <Button variant="primary" onClick={() => handleUpdateAccount(ifsc)}>
+            Update details
+          </Button>
+        </Form>
+      </div>
     ) : (
-      <AddAccountForm handleAddAccount={this.handleAddAccount} />
-    );
-  }
-}
+      <div className="account-form col-md-6 offset-md-3">
+        {errorMsg && errorMsg.withdraw_error && (
+          <p className="errorMsg">{errorMsg.withdraw_error}</p>
+        )}
+        {errorMsg && errorMsg.add_error && (
+          <p className="errorMsg">{errorMsg.add_error}</p>
+        )}
+        <Form onSubmit={handleOnSubmit} className="account-form">
+          <Form.Group controlId="type">
+            <Form.Label>{type}</Form.Label>
+            <a href="/#" className="edit-account" onClick={handleEditAccount}>
+              Edit Account Details
+            </a>
+          </Form.Group>
+          <hr />
+          <Form.Group controlId="accnt_no">
+            <Form.Label>Account number: </Form.Label>
+            <span className="label-value">{account && account_no}</span>
+          </Form.Group>
+          <Form.Group controlId="accnt_no">
+            <Form.Label>Available balance: </Form.Label>
+            <span className="label-value">
+              {account && account.total_balance}
+            </span>
+          </Form.Group>
+          <Form.Group controlId="amount">
+            <Form.Label>Amount:</Form.Label>
+            <Form.Control
+              type="number"
+              placeholder={`Enter amount to ${selectedType}`}
+              value={amount}
+              onChange={handleAmountChange}
+            />
+          </Form.Group>
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form>
+      </div>
+    )
+  ) : (
+    <AddAccountForm handleAddAccount={handleAddAccount} />
+  );
+};
 
 const mapStateToProps = (state) => ({
   email: state.auth && state.auth.email,
