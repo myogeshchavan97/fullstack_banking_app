@@ -56,7 +56,7 @@ Router.post('/account', authMiddleware, async (req, res) => {
     res.status(201).send();
   } catch (error) {
     res.send({
-      update_error: 'Error while adding new account..Try again later.'
+      add_error: 'Error while adding new account..Try again later.'
     });
   }
 });
