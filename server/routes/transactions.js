@@ -75,6 +75,8 @@ Router.post('/withdraw/:id', authMiddleware, async (req, res) => {
     res.status(400).send({
       withdraw_error: 'Error while withdrawing amount..Try again later.'
     });
+  } finally {
+    client.release();
   }
 });
 
