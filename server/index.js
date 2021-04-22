@@ -11,6 +11,9 @@ app.use(express.json());
 app.use(cors());
 app.use(authRoute);
 app.use(profileRoute);
+app.use("*", (req,res) => {
+  res.json("Page not found.");
+})
 
 app.listen(PORT, () => {
   console.log(`server started on port ${PORT}`);
